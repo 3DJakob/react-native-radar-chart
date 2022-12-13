@@ -3,9 +3,10 @@ import { Circle, Line } from 'react-native-svg'
 
 export interface GridProps {
   fields: number[]
+  gridColor?: string
 }
 
-const Grid: React.FC<GridProps> = ({ fields }) => {
+const Grid: React.FC<GridProps> = ({ fields, gridColor = 'black' }) => {
   const radiusStep = 2 * Math.PI / fields.length
   const numberOfRings = 5
 
@@ -15,7 +16,8 @@ const Grid: React.FC<GridProps> = ({ fields }) => {
       cx='50'
       cy='50'
       r={i * 10 + 10}
-      stroke='rgba(0, 0, 0, 0.1)'
+      stroke={gridColor}
+      strokeOpacity={0.2}
       strokeDasharray='1, 2'
       strokeWidth={0.6}
                />)
@@ -26,7 +28,7 @@ const Grid: React.FC<GridProps> = ({ fields }) => {
     const angle = i * radiusStep
     const x = 50 + 50 * Math.cos(angle)
     const y = 50 + 50 * Math.sin(angle)
-    LineSlices.push(<Line x1='50' y1='50' x2={x} y2={y} stroke='rgba(0, 0, 0, 0.1)' strokeDasharray='1, 2' strokeWidth={0.6} />)
+    LineSlices.push(<Line x1='50' y1='50' x2={x} y2={y} stroke={gridColor} strokeOpacity={0.2} strokeDasharray='1, 2' strokeWidth={0.6} />)
   }
 
   return (

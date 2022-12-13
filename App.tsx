@@ -14,6 +14,7 @@ const App: React.FC = () => {
             [0.1, 0.3, 0.2, 0.5, 0.7]
           ]
         }
+        gridColor='white'
       />
       <Text>under</Text>
     </View>
@@ -23,7 +24,7 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#333',
     alignItems: 'center',
     justifyContent: 'center'
   }
