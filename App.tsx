@@ -1,13 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native'
+import RadarChart from './radar-chart'
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <RadarChart fields={
+        [
+          [0.2, 0.5, 0.3, 1.0, 0.3],
+          [0.6, 1.0, 0.7, 0.1, 0.2]
+        ]
+      }
+      />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -15,6 +20,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    justifyContent: 'center'
+  }
+})
+
+export default App
