@@ -3,9 +3,10 @@ import { Polygon } from 'react-native-svg'
 
 export interface ChartProps {
   fields: number[]
+  color: string
 }
 
-const Chart: React.FC<ChartProps> = ({ fields }) => {
+const Chart: React.FC<ChartProps> = ({ fields, color }) => {
   const radiusStep = 2 * Math.PI / fields.length
   const coordinates = fields.map((field, index) => {
     const radius = radiusStep * index
@@ -23,8 +24,10 @@ const Chart: React.FC<ChartProps> = ({ fields }) => {
               }
               ).join(' ')
             }
-        stroke='rgba(0, 0, 255, 1)'
-        fill='rgba(0, 0, 255, 0.2)'
+        stroke={color}
+        strokeOpacity={1}
+        fill={color}
+        fillOpacity={0.5}
         strokeWidth={0.6}
         strokeMiterlimit={10}
         strokeLinejoin='round'
