@@ -13,6 +13,7 @@ const Grid: React.FC<GridProps> = ({ fields, gridColor = 'black' }) => {
   const Rings = []
   for (let i = 0; i < numberOfRings; i++) {
     Rings.push(<Circle
+      key={i}
       cx='50'
       cy='50'
       r={i * 10 + 10}
@@ -28,7 +29,7 @@ const Grid: React.FC<GridProps> = ({ fields, gridColor = 'black' }) => {
     const angle = i * radiusStep
     const x = 50 + 50 * Math.cos(angle)
     const y = 50 + 50 * Math.sin(angle)
-    LineSlices.push(<Line x1='50' y1='50' x2={x} y2={y} stroke={gridColor} strokeOpacity={0.2} strokeDasharray='1, 2' strokeWidth={0.6} />)
+    LineSlices.push(<Line key={i} x1='50' y1='50' x2={x} y2={y} stroke={gridColor} strokeOpacity={0.2} strokeDasharray='1, 2' strokeWidth={0.6} />)
   }
 
   return (

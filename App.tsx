@@ -1,33 +1,106 @@
-import { StyleSheet, Text, View } from 'react-native'
-import RadarChart from './radar-chart'
+import { LayoutChangeEvent, NativeScrollEvent, SafeAreaView, ScrollView, NativeSyntheticEvent } from 'react-native'
+import RadarChart, { generateColors } from './radar-chart'
+import styled from 'styled-components/native'
+import Character, { characterToFields, CharacterType, sampleCharacters } from './Character'
+import { useState } from 'react'
+import DotIndicators from './DotIndicators'
+
+const Container = styled.View`
+  flex: 1;
+`
+
+const Inset = styled.View`
+  padding: 0 20px;
+`
+
+const Header = styled.Text`
+  font-size: 48px;
+  color: #fff;
+  font-weight: bold;
+`
+
+const colors = generateColors(sampleCharacters.length)
 
 const App: React.FC = () => {
+  const [characters, setCharacters] = useState(sampleCharacters)
+  const [cardWidth, setCardWidth] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const updateCharacter = (character: CharacterType): void => {
+    const newCharacters = characters.map(c => {
+      if (c.name === character.name) {
+        return character
+      }
+      return c
+    })
+    setCharacters(newCharacters)
+  }
+
+  const updateWidth = (event: LayoutChangeEvent): void => {
+    setCardWidth(event.nativeEvent.layout.width)
+  }
+
+  const updateIndex = (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
+    const index = Math.round(event.nativeEvent.contentOffset.x / cardWidth)
+    setActiveIndex(index)
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>over</Text>
-      <RadarChart
-        fields={
-          [
-            [0.2, 0.5, 0.3, 1.0, 0.3],
-            [0.6, 1.0, 0.7, 0.1, 0.2],
-            [0.8, 0.2, 0.5, 0.3, 0.9],
-            [0.1, 0.3, 0.2, 0.5, 0.7]
-          ]
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#333' }}>
+      <Container>
+        <Inset>
+          <Header>Customize characters</Header>
+          <RadarChart
+            fields={characters.map(c => characterToFields(c))}
+            colors={colors}
+            gridColor='white'
+          />
+        </Inset>
+
+        {cardWidth === 0 && (
+          <Character
+            onLayout={updateWidth}
+            character={characters[0]}
+            color={colors[0]}
+            onCharacterChange={updateCharacter}
+            style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+          />
+        )}
+
+        {cardWidth !== 0 && (
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={2}
+            onScroll={updateIndex}
+            horizontal
+            snapToInterval={cardWidth}
+            style={{ position: 'absolute', bottom: 0 }}
+            decelerationRate={100}
+          >
+            {
+          characters.map((character, index) => {
+            return (
+              <Character
+                style={{ width: cardWidth - 20, marginHorizontal: 10 }}
+                key={character.name}
+                character={character}
+                color={colors[index]}
+                onCharacterChange={updateCharacter}
+              />
+            )
+          })
         }
-        gridColor='white'
-      />
-      <Text>under</Text>
-    </View>
+          </ScrollView>
+        )}
+        <DotIndicators
+          style={{ position: 'absolute', bottom: -14, left: 0, right: 0 }}
+          index={activeIndex}
+          highlightColor={colors[activeIndex]}
+          length={characters.length}
+        />
+      </Container>
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#333',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
 
 export default App
