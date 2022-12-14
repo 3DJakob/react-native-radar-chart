@@ -1,23 +1,25 @@
 import { useSpring, animated } from '@react-spring/native'
 import { Polygon } from 'react-native-svg'
+import { Field } from '.'
 
 export interface ChartProps {
-  fields: number[]
+  fields: Field[]
   color: string
+  active: boolean
 }
 
 const AnimatedPolygon = animated(Polygon)
 
-const Chart: React.FC<ChartProps> = ({ fields, color }) => {
+const Chart: React.FC<ChartProps> = ({ fields, color, active }) => {
   const radiusStep = 2 * Math.PI / fields.length
   const coordinates = fields.map((field, index) => {
     const radius: number = radiusStep * index
-    const x = Math.cos(radius) * field
-    const y = Math.sin(radius) * field
+    const x = Math.cos(radius) * field.value
+    const y = Math.sin(radius) * field.value
     return { x, y }
   }).map(c => [c.x, c.y]).flat().map(c => c * 50 + 50)
 
-  const springState = useSpring({
+  const coordinatesSpring = useSpring({
     coordinates,
     config: {
       mass: 0.1,
@@ -26,14 +28,26 @@ const Chart: React.FC<ChartProps> = ({ fields, color }) => {
     }
   })
 
+  const opacitySpring = useSpring({
+    strokeOpacity: active ? 1.0 : 0.2,
+    fillOpacity: active ? 0.5 : 0.2,
+    config: {
+      mass: 0.1,
+      tension: 100,
+      friction: 10
+    }
+  })
+
+  console.log(active)
+
   return (
     <>
       <AnimatedPolygon
-        points={springState.coordinates}
+        points={coordinatesSpring.coordinates}
         stroke={color}
-        strokeOpacity={1}
+        strokeOpacity={opacitySpring.strokeOpacity}
         fill={color}
-        fillOpacity={0.5}
+        fillOpacity={opacitySpring.fillOpacity}
         strokeWidth={0.6}
         strokeMiterlimit={10}
         strokeLinejoin='round'

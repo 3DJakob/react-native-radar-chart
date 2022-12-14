@@ -4,6 +4,7 @@ import styled from 'styled-components/native'
 import Character, { characterToFields, CharacterType, sampleCharacters } from './Character'
 import { useState } from 'react'
 import DotIndicators from './DotIndicators'
+import { StatusBar } from 'expo-status-bar'
 
 const Container = styled.View`
   flex: 1;
@@ -47,11 +48,18 @@ const App: React.FC = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#333' }}>
+      <StatusBar style='light' />
       <Container>
         <Inset>
           <Header>Customize characters</Header>
           <RadarChart
-            fields={characters.map(c => characterToFields(c))}
+            charts={characters.map(c => {
+              console.log(c.name === characters[activeIndex].name)
+              return {
+                fields: characterToFields(c),
+                active: c.name === characters[activeIndex].name
+              }
+            })}
             colors={colors}
             gridColor='white'
           />
@@ -75,7 +83,7 @@ const App: React.FC = () => {
             horizontal
             snapToInterval={cardWidth}
             style={{ position: 'absolute', bottom: 0 }}
-            decelerationRate={100}
+            decelerationRate='fast'
           >
             {
           characters.map((character, index) => {

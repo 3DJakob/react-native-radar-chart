@@ -10,7 +10,7 @@ const Row = styled.View`
 const IconBox = styled.View`
   width: 30px;
   height: 30px;
-  border-radius: 2px;
+  border-radius: 15px;
   background-color: #392E04;
   justify-content: center;
   align-items: center;
@@ -47,17 +47,17 @@ const StatInput: React.FC<StatInputProps> = ({ value, onValue, min = 0, max = 10
 
   return (
     <Row>
-      <IconBox style={{ backgroundColor: color }}>
-        <TouchableOpacity onPress={decrement}>
-          <AntDesign name='minus' size={28} color='white' />
-        </TouchableOpacity>
-      </IconBox>
+      <TouchableOpacity onPress={decrement}>
+        <IconBox style={{ backgroundColor: color }}>
+          <AntDesign name='minus' size={20} color='white' />
+        </IconBox>
+      </TouchableOpacity>
       <Value>{value}</Value>
-      <IconBox style={{ backgroundColor: color }}>
-        <TouchableOpacity onPress={increment}>
-          <AntDesign name='plus' size={28} color='white' />
-        </TouchableOpacity>
-      </IconBox>
+      <TouchableOpacity onPress={increment}>
+        <IconBox style={{ backgroundColor: color }}>
+          <AntDesign name='plus' size={20} color='white' />
+        </IconBox>
+      </TouchableOpacity>
     </Row>
   )
 }

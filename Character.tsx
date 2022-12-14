@@ -3,6 +3,7 @@ import { LayoutChangeEvent, StyleProp, Text, View, ViewStyle } from 'react-nativ
 import styled from 'styled-components/native'
 import StatInput from './StatInput'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Field } from './radar-chart'
 
 const Container = styled(View)`
   border-radius: 10px;
@@ -16,8 +17,8 @@ const Container = styled(View)`
 `
 
 const Content = styled(View)`
-  margin: 6px;
-  padding: 10px;
+  margin: 0;
+  padding: 20px;
   border-radius: 6px;
   background-color: #444;
 `
@@ -30,7 +31,7 @@ const StatsContainer = styled(View)`
 const CaracterName = styled(Text)`
   font-size: 30px;
   font-weight: bold;
-  color: #fff;
+  color: ${(props: { color: string }) => props.color};
 `
 const Trait = styled(Text)`
   font-size: 16px;
@@ -56,41 +57,50 @@ export interface CharacterType {
 }
 
 export const sampleCharacters: CharacterType[] = [{
-  name: 'John Doe',
+  name: 'SpongeBob SquarePants',
   strength: 2,
-  dexterity: 5,
+  dexterity: 8,
   stamina: 3,
-  charisma: 1,
-  intelligence: 3,
+  charisma: 10,
+  intelligence: 1,
   health: 5
 },
 {
-  name: 'Jane Doe',
+  name: 'Patrick Star',
   strength: 6,
   dexterity: 1,
   stamina: 7,
-  charisma: 1,
-  intelligence: 2,
-  health: 5
+  charisma: 8,
+  intelligence: 1,
+  health: 8
 },
 {
-  name: 'Alex Knutsson',
+  name: 'Squidward Tentacles',
   strength: 8,
   dexterity: 2,
   stamina: 5,
   charisma: 3,
   intelligence: 9,
   health: 5
+},
+{
+  name: 'Sandy Cheeks',
+  strength: 4,
+  dexterity: 3,
+  stamina: 5,
+  charisma: 2,
+  intelligence: 7,
+  health: 5
 }]
 
-export const characterToFields = (character: CharacterType): number[] => {
+export const characterToFields = (character: CharacterType): Field[] => {
   return [
-    character.strength / 10,
-    character.dexterity / 10,
-    character.stamina / 10,
-    character.charisma / 10,
-    character.intelligence / 10,
-    character.health / 10
+    { label: 'Strength', value: character.strength / 10 },
+    { label: 'Dexterity', value: character.dexterity / 10 },
+    { label: 'Stamina', value: character.stamina / 10 },
+    { label: 'Charisma', value: character.charisma / 10 },
+    { label: 'Intelligence', value: character.intelligence / 10 },
+    { label: 'Health', value: character.health / 10 }
   ]
 }
 
@@ -124,7 +134,7 @@ const Character: React.FC<CharacterProps> = ({ character, onCharacterChange, col
     <Container onLayout={onLayout} style={style}>
       <LinearGradient colors={[color, getDarkerShadeFromHex(color, -20)]} style={{ backgroundColor: 'blue', borderRadius: 10, marginBottom: 10 }}>
         <Content>
-          <CaracterName>{character.name}</CaracterName>
+          <CaracterName color={color}>{character.name}</CaracterName>
           <StatsContainer>
             <Row>
               <Trait>Strength:</Trait>

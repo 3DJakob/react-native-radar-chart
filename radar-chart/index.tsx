@@ -5,8 +5,18 @@ import Chart from './Chart'
 import Grid from './Grid'
 import randomColor from 'randomcolor'
 
+export interface Field {
+  label: string
+  value: number
+}
+
+export interface ChartData {
+  fields: Field[]
+  active: boolean
+}
+
 export interface RadarChartProps {
-  fields: number[][]
+  charts: ChartData[]
   colors?: string[]
   gridColor?: string
 }
@@ -22,10 +32,10 @@ export const generateColors = (numberOfColors: number): string[] => {
   return colors
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ fields, colors = generateColors(fields.length), gridColor }) => {
-  const ChartContent = fields.map((field, index) => {
+const RadarChart: React.FC<RadarChartProps> = ({ charts, colors = generateColors(charts.length), gridColor }) => {
+  const ChartContent = charts.map((chart, index) => {
     return (
-      <Chart key={index} fields={field} color={colors[index]} />
+      <Chart key={index} fields={chart.fields} color={colors[index]} active={charts[index].active} />
     )
   })
 
@@ -38,7 +48,7 @@ const RadarChart: React.FC<RadarChartProps> = ({ fields, colors = generateColors
       <View style={{ padding: 30 }}>
         <Svg height='100%' width='100%' viewBox='0 0 100 100'>
           {ChartContent}
-          <Grid fields={fields[0]} gridColor={gridColor} />
+          <Grid numberOfAxes={charts[0].fields.length} gridColor={gridColor} />
         </Svg>
       </View>
     </View>

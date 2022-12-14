@@ -2,12 +2,12 @@ import React from 'react'
 import { Circle, Line } from 'react-native-svg'
 
 export interface GridProps {
-  fields: number[]
+  numberOfAxes: number
   gridColor?: string
 }
 
-const Grid: React.FC<GridProps> = ({ fields, gridColor = 'black' }) => {
-  const radiusStep = 2 * Math.PI / fields.length
+const Grid: React.FC<GridProps> = ({ numberOfAxes, gridColor = 'black' }) => {
+  const radiusStep = 2 * Math.PI / numberOfAxes
   const numberOfRings = 5
 
   const Rings = []
@@ -25,7 +25,7 @@ const Grid: React.FC<GridProps> = ({ fields, gridColor = 'black' }) => {
   }
 
   const LineSlices = []
-  for (let i = 0; i < fields.length; i++) {
+  for (let i = 0; i < numberOfAxes; i++) {
     const angle = i * radiusStep
     const x = 50 + 50 * Math.cos(angle)
     const y = 50 + 50 * Math.sin(angle)
