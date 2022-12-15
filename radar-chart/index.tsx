@@ -13,7 +13,6 @@ export interface ChartData {
 
 export interface RadarChartProps {
   labels?: string[]
-  colors?: string[]
   gridColor?: string
   children?: React.ReactNode
   zoom?: number
@@ -47,6 +46,7 @@ const appendColor = (children: React.ReactNode, colors: string[]): React.ReactNo
   return React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
       if (child.type === Chart) {
+        if (child.props.color != null) return child
         // @ts-expect-error
         return React.cloneElement(child, { color: colors[index] })
       } else {
@@ -57,8 +57,9 @@ const appendColor = (children: React.ReactNode, colors: string[]): React.ReactNo
   })
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(getAxisCount(children)), gridColor, zoom = 80, labelOffset = 5 }) => {
-  const ChildrenWithProps = appendColor(children, colors)
+const RadarChart: React.FC<RadarChartProps> = ({ children, labels, gridColor, zoom = 80, labelOffset = 5 }) => {
+  const sampleColors = generateColors(getAxisCount(children))
+  const ChildrenWithProps = appendColor(children, sampleColors)
 
   zoom = 100 - zoom
   const viewBox = [0 - zoom, 0 - zoom, 100 + zoom * 2, 100 + zoom * 2].join(' ')

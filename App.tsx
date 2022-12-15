@@ -54,13 +54,12 @@ const App: React.FC = () => {
           <Header>Customize characters</Header>
           <RadarChart
             labels={labels}
-            colors={colors}
             gridColor='white'
           >
             {
               characters.map((character, index) => {
                 return (
-                  <Chart key={index} fields={characterToFields(character)} active={character.name === characters[activeIndex].name} />
+                  <Chart key={index} color={colors[index]} fields={characterToFields(character)} active={character.name === characters[activeIndex].name} />
                 )
               })
             }

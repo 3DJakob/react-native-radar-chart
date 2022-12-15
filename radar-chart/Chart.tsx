@@ -4,12 +4,12 @@ import { Polygon } from 'react-native-svg'
 export interface ChartProps {
   fields: number[]
   color?: string
-  active: boolean
+  active?: boolean
 }
 
 const AnimatedPolygon = animated(Polygon)
 
-const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active }) => {
+const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active = true }) => {
   const radiusStep = 2 * Math.PI / fields.length
   const coordinates = fields.map((field, index) => {
     const radius: number = radiusStep * index
