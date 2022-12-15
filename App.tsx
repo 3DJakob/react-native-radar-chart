@@ -1,7 +1,7 @@
 import { LayoutChangeEvent, NativeScrollEvent, SafeAreaView, ScrollView, NativeSyntheticEvent } from 'react-native'
 import RadarChart, { Chart, generateColors } from './radar-chart'
 import styled from 'styled-components/native'
-import Character, { characterToFields, CharacterType, sampleCharacters } from './Character'
+import Character, { characterToFields, CharacterType, labels, sampleCharacters } from './Character'
 import { useState } from 'react'
 import DotIndicators from './DotIndicators'
 import { StatusBar } from 'expo-status-bar'
@@ -53,7 +53,7 @@ const App: React.FC = () => {
         <Inset>
           <Header>Customize characters</Header>
           <RadarChart
-            labels={['Strength', 'Dexterity', 'Stamina', 'Charisma', 'Intelligence', 'Health']}
+            labels={labels}
             colors={colors}
             gridColor='white'
           >

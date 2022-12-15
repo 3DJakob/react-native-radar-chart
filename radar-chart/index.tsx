@@ -4,6 +4,7 @@ import Svg from 'react-native-svg'
 import Chart from './Chart'
 import Grid from './Grid'
 import randomColor from 'randomcolor'
+import Labels from './Labels'
 
 export interface ChartData {
   fields: number[]
@@ -15,6 +16,8 @@ export interface RadarChartProps {
   colors?: string[]
   gridColor?: string
   children?: React.ReactNode
+  zoom?: number
+  labelOffset?: number
 }
 
 export const generateColors = (numberOfColors: number): string[] => {
@@ -54,8 +57,11 @@ const appendColor = (children: React.ReactNode, colors: string[]): React.ReactNo
   })
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(getAxisCount(children)), gridColor }) => {
+const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(getAxisCount(children)), gridColor, zoom = 80, labelOffset = 5 }) => {
   const ChildrenWithProps = appendColor(children, colors)
+
+  zoom = 100 - zoom
+  const viewBox = [0 - zoom, 0 - zoom, 100 + zoom * 2, 100 + zoom * 2].join(' ')
 
   return (
     <View style={{
@@ -63,12 +69,12 @@ const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = gene
       aspectRatio: 1
     }}
     >
-      <View style={{ padding: 30 }}>
-        <Svg height='100%' width='100%' viewBox='0 0 100 100'>
-          {ChildrenWithProps}
-          <Grid numberOfAxes={getAxisCount(children)} gridColor={gridColor} />
-        </Svg>
-      </View>
+      <Svg height='100%' width='100%' viewBox={viewBox}>
+        {labels != null && <Labels labelOffset={labelOffset} labels={labels} />}
+
+        {ChildrenWithProps}
+        <Grid numberOfAxes={getAxisCount(children)} gridColor={gridColor} />
+      </Svg>
     </View>
   )
 }

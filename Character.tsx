@@ -4,6 +4,15 @@ import styled from 'styled-components/native'
 import StatInput from './StatInput'
 import { LinearGradient } from 'expo-linear-gradient'
 
+export const labels = [
+  'Charisma',
+  'Dexterity',
+  'Health',
+  'Intelligence',
+  'Stamina',
+  'Strength'
+]
+
 const Container = styled(View)`
   border-radius: 10px;
   
@@ -45,61 +54,65 @@ const Row = styled(View)`
 const Spacer = styled(View)`
   flex: 1;
 `
-export interface CharacterType {
-  name: string
-  strength: number
-  dexterity: number
-  stamina: number
+
+export interface CharacterProperties {
   charisma: number
-  intelligence: number
+  dexterity: number
   health: number
+  intelligence: number
+  stamina: number
+  strength: number
+}
+
+export interface CharacterType extends CharacterProperties {
+  name: string
 }
 
 export const sampleCharacters: CharacterType[] = [{
-  name: 'SpongeBob SquarePants',
-  strength: 2,
+  charisma: 7,
   dexterity: 8,
+  health: 5,
+  intelligence: 1,
+  name: 'SpongeBob SquarePants',
   stamina: 3,
-  charisma: 10,
-  intelligence: 1,
-  health: 5
+  strength: 2
 },
 {
-  name: 'Patrick Star',
-  strength: 6,
-  dexterity: 1,
-  stamina: 7,
   charisma: 8,
+  dexterity: 1,
+  health: 8,
   intelligence: 1,
-  health: 8
+  name: 'Patrick Star',
+  stamina: 7,
+  strength: 6
 },
 {
-  name: 'Squidward Tentacles',
-  strength: 8,
-  dexterity: 2,
-  stamina: 5,
   charisma: 3,
+  dexterity: 2,
+  health: 5,
   intelligence: 9,
-  health: 5
+  name: 'Squidward Tentacles',
+  stamina: 5,
+  strength: 8
 },
 {
-  name: 'Sandy Cheeks',
-  strength: 4,
-  dexterity: 3,
-  stamina: 5,
   charisma: 2,
+  dexterity: 3,
+  health: 5,
   intelligence: 7,
-  health: 5
+  name: 'Sandy Cheeks',
+  stamina: 5,
+  strength: 4
 }]
 
 export const characterToFields = (character: CharacterType): number[] => {
   return [
-    character.strength / 10,
-    character.dexterity / 10,
-    character.stamina / 10,
     character.charisma / 10,
+    character.dexterity / 10,
+    character.health / 10,
     character.intelligence / 10,
-    character.health / 10
+    character.stamina / 10,
+    character.strength / 10
   ]
 }
 
@@ -126,7 +139,9 @@ const Character: React.FC<CharacterProps> = ({ character, onCharacterChange, col
     const R = (num >> 16) + amt
     const B = (num >> 8 & 0x00FF) + amt
     const G = (num & 0x0000FF) + amt
-    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1)
+    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                              (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 +
+                              (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1)
   }
 
   return (
@@ -135,36 +150,25 @@ const Character: React.FC<CharacterProps> = ({ character, onCharacterChange, col
         <Content>
           <CaracterName color={color}>{character.name}</CaracterName>
           <StatsContainer>
-            <Row>
-              <Trait>Strength:</Trait>
-              <Spacer />
-              <StatInput value={character.strength} onValue={(value) => updateCharacter({ strength: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
-              <Trait>Dexterity:</Trait>
-              <Spacer />
-              <StatInput value={character.dexterity} onValue={(value) => updateCharacter({ dexterity: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
-              <Trait>Stamina:</Trait>
-              <Spacer />
-              <StatInput value={character.stamina} onValue={(value) => updateCharacter({ stamina: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
-              <Trait>Charisma:</Trait>
-              <Spacer />
-              <StatInput value={character.charisma} onValue={(value) => updateCharacter({ charisma: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
-              <Trait>Intelligence:</Trait>
-              <Spacer />
-              <StatInput value={character.intelligence} onValue={(value) => updateCharacter({ intelligence: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
-              <Trait>Health:</Trait>
-              <Spacer />
-              <StatInput value={character.health} onValue={(value) => updateCharacter({ health: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
+
+            {
+              labels.map((label, index) => {
+                const value = character[label.toLowerCase() as keyof CharacterProperties]
+                return (
+                  <Row key={index}>
+                    <Trait>{label}:</Trait>
+                    <Spacer />
+                    <StatInput
+                      value={value}
+                      onValue={(value) => updateCharacter({
+                        [label.toLowerCase()]: value
+                      })}
+                      color={getDarkerShadeFromHex(color, -30)}
+                    />
+                  </Row>
+                )
+              })
+            }
           </StatsContainer>
         </Content>
       </LinearGradient>
