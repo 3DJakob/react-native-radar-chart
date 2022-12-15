@@ -54,7 +54,6 @@ const App: React.FC = () => {
           <Header>Customize characters</Header>
           <RadarChart
             charts={characters.map(c => {
-              console.log(c.name === characters[activeIndex].name)
               return {
                 fields: characterToFields(c),
                 active: c.name === characters[activeIndex].name

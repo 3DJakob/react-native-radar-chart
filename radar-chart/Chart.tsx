@@ -38,8 +38,6 @@ const Chart: React.FC<ChartProps> = ({ fields, color, active }) => {
     }
   })
 
-  console.log(active)
-
   return (
     <>
       <AnimatedPolygon
