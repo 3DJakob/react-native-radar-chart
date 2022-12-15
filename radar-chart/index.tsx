@@ -5,20 +5,16 @@ import Chart from './Chart'
 import Grid from './Grid'
 import randomColor from 'randomcolor'
 
-export interface Field {
-  label: string
-  value: number
-}
-
 export interface ChartData {
-  fields: Field[]
+  fields: number[]
   active: boolean
 }
 
 export interface RadarChartProps {
-  charts: ChartData[]
+  labels: string[]
   colors?: string[]
   gridColor?: string
+  children?: React.ReactNode
 }
 
 export const generateColors = (numberOfColors: number): string[] => {
@@ -32,11 +28,17 @@ export const generateColors = (numberOfColors: number): string[] => {
   return colors
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ charts, colors = generateColors(charts.length), gridColor }) => {
-  const ChartContent = charts.map((chart, index) => {
-    return (
-      <Chart key={index} fields={chart.fields} color={colors[index]} active={charts[index].active} />
-    )
+const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(labels.length), gridColor }) => {
+  const ChildrenWithProps = React.Children.map(children, (child, index) => {
+    if (React.isValidElement(child)) {
+      if (child.type === Chart) {
+        // @ts-expect-error
+        return React.cloneElement(child, { color: colors[index] })
+      } else {
+        console.warn('RadarChart children must be of type Chart')
+      }
+    }
+    return child
   })
 
   return (
@@ -47,8 +49,8 @@ const RadarChart: React.FC<RadarChartProps> = ({ charts, colors = generateColors
     >
       <View style={{ padding: 30 }}>
         <Svg height='100%' width='100%' viewBox='0 0 100 100'>
-          {ChartContent}
-          <Grid numberOfAxes={charts[0].fields.length} gridColor={gridColor} />
+          {ChildrenWithProps}
+          <Grid numberOfAxes={labels.length} gridColor={gridColor} />
         </Svg>
       </View>
     </View>
@@ -56,3 +58,6 @@ const RadarChart: React.FC<RadarChartProps> = ({ charts, colors = generateColors
 }
 
 export default RadarChart
+export {
+  Chart
+}

@@ -3,7 +3,6 @@ import { LayoutChangeEvent, StyleProp, Text, View, ViewStyle } from 'react-nativ
 import styled from 'styled-components/native'
 import StatInput from './StatInput'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Field } from './radar-chart'
 
 const Container = styled(View)`
   border-radius: 10px;
@@ -93,14 +92,14 @@ export const sampleCharacters: CharacterType[] = [{
   health: 5
 }]
 
-export const characterToFields = (character: CharacterType): Field[] => {
+export const characterToFields = (character: CharacterType): number[] => {
   return [
-    { label: 'Strength', value: character.strength / 10 },
-    { label: 'Dexterity', value: character.dexterity / 10 },
-    { label: 'Stamina', value: character.stamina / 10 },
-    { label: 'Charisma', value: character.charisma / 10 },
-    { label: 'Intelligence', value: character.intelligence / 10 },
-    { label: 'Health', value: character.health / 10 }
+    character.strength / 10,
+    character.dexterity / 10,
+    character.stamina / 10,
+    character.charisma / 10,
+    character.intelligence / 10,
+    character.health / 10
   ]
 }
 

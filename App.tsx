@@ -1,5 +1,5 @@
 import { LayoutChangeEvent, NativeScrollEvent, SafeAreaView, ScrollView, NativeSyntheticEvent } from 'react-native'
-import RadarChart, { generateColors } from './radar-chart'
+import RadarChart, { Chart, generateColors } from './radar-chart'
 import styled from 'styled-components/native'
 import Character, { characterToFields, CharacterType, sampleCharacters } from './Character'
 import { useState } from 'react'
@@ -53,15 +53,18 @@ const App: React.FC = () => {
         <Inset>
           <Header>Customize characters</Header>
           <RadarChart
-            charts={characters.map(c => {
-              return {
-                fields: characterToFields(c),
-                active: c.name === characters[activeIndex].name
-              }
-            })}
+            labels={['Strength', 'Dexterity', 'Stamina', 'Charisma', 'Intelligence', 'Health']}
             colors={colors}
             gridColor='white'
-          />
+          >
+            {
+              characters.map((character, index) => {
+                return (
+                  <Chart key={index} fields={characterToFields(character)} active={character.name === characters[activeIndex].name} />
+                )
+              })
+            }
+          </RadarChart>
         </Inset>
 
         {cardWidth === 0 && (

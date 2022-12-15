@@ -1,21 +1,20 @@
 import { useSpring, animated } from '@react-spring/native'
 import { Polygon } from 'react-native-svg'
-import { Field } from '.'
 
 export interface ChartProps {
-  fields: Field[]
-  color: string
+  fields: number[]
+  color?: string
   active: boolean
 }
 
 const AnimatedPolygon = animated(Polygon)
 
-const Chart: React.FC<ChartProps> = ({ fields, color, active }) => {
+const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active }) => {
   const radiusStep = 2 * Math.PI / fields.length
   const coordinates = fields.map((field, index) => {
     const radius: number = radiusStep * index
-    const x = Math.cos(radius) * field.value
-    const y = Math.sin(radius) * field.value
+    const x = Math.cos(radius) * field
+    const y = Math.sin(radius) * field
     return { x, y }
   }).map(c => [c.x, c.y]).flat().map(c => c * 50 + 50)
 
