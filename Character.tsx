@@ -142,24 +142,24 @@ const Character: React.FC<CharacterProps> = ({ character, onCharacterChange, col
               <StatInput value={character.strength} onValue={(value) => updateCharacter({ strength: value })} color={getDarkerShadeFromHex(color, -30)} />
             </Row>
             <Row>
-              <Trait>Charisma:</Trait>
-              <Spacer />
-              <StatInput value={character.charisma} onValue={(value) => updateCharacter({ charisma: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
               <Trait>Dexterity:</Trait>
               <Spacer />
               <StatInput value={character.dexterity} onValue={(value) => updateCharacter({ dexterity: value })} color={getDarkerShadeFromHex(color, -30)} />
             </Row>
             <Row>
-              <Trait>Intelligence:</Trait>
-              <Spacer />
-              <StatInput value={character.intelligence} onValue={(value) => updateCharacter({ intelligence: value })} color={getDarkerShadeFromHex(color, -30)} />
-            </Row>
-            <Row>
               <Trait>Stamina:</Trait>
               <Spacer />
               <StatInput value={character.stamina} onValue={(value) => updateCharacter({ stamina: value })} color={getDarkerShadeFromHex(color, -30)} />
+            </Row>
+            <Row>
+              <Trait>Charisma:</Trait>
+              <Spacer />
+              <StatInput value={character.charisma} onValue={(value) => updateCharacter({ charisma: value })} color={getDarkerShadeFromHex(color, -30)} />
+            </Row>
+            <Row>
+              <Trait>Intelligence:</Trait>
+              <Spacer />
+              <StatInput value={character.intelligence} onValue={(value) => updateCharacter({ intelligence: value })} color={getDarkerShadeFromHex(color, -30)} />
             </Row>
             <Row>
               <Trait>Health:</Trait>
