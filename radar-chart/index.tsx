@@ -11,7 +11,7 @@ export interface ChartData {
 }
 
 export interface RadarChartProps {
-  labels: string[]
+  labels?: string[]
   colors?: string[]
   gridColor?: string
   children?: React.ReactNode
@@ -28,8 +28,20 @@ export const generateColors = (numberOfColors: number): string[] => {
   return colors
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(labels.length), gridColor }) => {
-  const ChildrenWithProps = React.Children.map(children, (child, index) => {
+const getAxisCount = (children: React.ReactNode): number => {
+  let numberOfAxes = 0
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child)) {
+      if (child.type === Chart) {
+        numberOfAxes = child.props.fields.length
+      }
+    }
+  })
+  return numberOfAxes
+}
+
+const appendColor = (children: React.ReactNode, colors: string[]): React.ReactNode => {
+  return React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
       if (child.type === Chart) {
         // @ts-expect-error
@@ -40,6 +52,10 @@ const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = gene
     }
     return child
   })
+}
+
+const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = generateColors(getAxisCount(children)), gridColor }) => {
+  const ChildrenWithProps = appendColor(children, colors)
 
   return (
     <View style={{
@@ -50,7 +66,7 @@ const RadarChart: React.FC<RadarChartProps> = ({ children, labels, colors = gene
       <View style={{ padding: 30 }}>
         <Svg height='100%' width='100%' viewBox='0 0 100 100'>
           {ChildrenWithProps}
-          <Grid numberOfAxes={labels.length} gridColor={gridColor} />
+          <Grid numberOfAxes={getAxisCount(children)} gridColor={gridColor} />
         </Svg>
       </View>
     </View>
