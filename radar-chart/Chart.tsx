@@ -9,7 +9,7 @@ export interface ChartProps {
 
 const AnimatedPolygon = animated(Polygon)
 
-const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active = true }) => {
+export const fieldsToCoordinates = (fields: number[]): number[] => {
   const radiusStep = 2 * Math.PI / fields.length
   const coordinates = fields.map((field, index) => {
     const radius: number = radiusStep * index
@@ -17,6 +17,11 @@ const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active = true 
     const y = Math.sin(radius) * field
     return { x, y }
   }).map(c => [c.x, c.y]).flat().map(c => c * 50 + 50)
+  return coordinates
+}
+
+const Chart: React.FC<ChartProps> = ({ fields, color = '#bdff91', active = true }) => {
+  const coordinates = fieldsToCoordinates(fields)
 
   const coordinatesSpring = useSpring({
     coordinates,
